@@ -6,9 +6,6 @@ on:
 
 jobs:
 
-  # -------------------------------------
-  # FRONTEND DEPLOYMENT TO NETLIFY
-  # -------------------------------------
   deploy-frontend:
     name: Deploy Frontend to Netlify
     runs-on: ubuntu-latest
@@ -36,9 +33,6 @@ jobs:
         run: netlify deploy --prod --dir=dist
 
 
-  # -------------------------------------
-  # BACKEND DEPLOYMENT TO RENDER (FREE)
-  # -------------------------------------
   deploy-backend:
     name: Deploy Backend to Render (Free Plan API)
     runs-on: ubuntu-latest
@@ -46,7 +40,6 @@ jobs:
 
     steps:
       - name: Trigger Render Deployment
-      # This API method works on FREE plan (webhooks do not)
         run: |
           curl -X POST \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
