@@ -1,31 +1,81 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+# name: Fullstack CI/CD
 
-name: Node.js CI
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# jobs:
+#   build:
 
-jobs:
-  build:
+#     runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         node-version: [18.x]
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+#     steps:
+#     # Checkout the code
+#     - uses: actions/checkout@v4
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+#     # Setup Node.js
+#     - name: Setup Node.js
+#       uses: actions/setup-node@v4
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#         cache: 'npm'
+
+#     # -------------------------
+#     # Backend: Install & Test
+#     # -------------------------
+#     - name: Install Backend Dependencies
+#       run: |
+#         cd backend
+#         npm ci
+
+#     - name: Build Backend (if any build step)
+#       run: |
+#         cd backend
+#         npm run build --if-present
+
+#     - name: Test Backend
+#       run: |
+#         cd backend
+#         npm test
+
+#     # -------------------------
+#     # Frontend: Install & Build
+#     # -------------------------
+#     - name: Install Frontend Dependencies
+#       run: |
+#         cd frontend
+#         npm ci
+
+#     - name: Build Frontend
+#       run: |
+#         cd frontend
+#         npm run build
+
+#     # -------------------------
+#     # Deploy Frontend to Netlify
+#     # -------------------------
+#     - name: Deploy Frontend to Netlify
+#       uses: nwtgck/actions-netlify@v1.2
+#       with:
+#         publish-dir: ./frontend/build
+#         production-branch: main
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#         netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+#     # -------------------------
+#     # Deploy Backend to Render
+#     # -------------------------
+#     - name: Deploy Backend to Render
+#       run: |
+#         curl -X POST \
+#           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+#           -H "Content-Type: application/json" \
+#           -d '{"clearCache": true}' \
+#           https://api.render.com/deploy/srv-xxxxxxxxxxxx

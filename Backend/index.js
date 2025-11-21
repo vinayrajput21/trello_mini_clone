@@ -16,6 +16,7 @@ try {
   process.exit(1);
 }
 
+app.use(cors({ origin: "https://your-frontend.netlify.app" }));
 app.use(cors());
 app.use(express.json());
 
